@@ -2,7 +2,7 @@
    Maven Recipes
 -------------------------------------------------------------------------------
 
-* Build the eclipse projects:
+* Build the eclipse projects (may need to build everything once first):
 	mvn eclipse:eclipse
 
 * Format file headers
