@@ -1,0 +1,143 @@
+/**
+ * eAdventure (formerly <e-Adventure> and <e-Game>) is a research project of the
+ *    <e-UCM> research group.
+ *
+ *    Copyright 2005-2010 <e-UCM> research group.
+ *
+ *    You can access a list of all the contributors to eAdventure at:
+ *          http://e-adventure.e-ucm.es/contributors
+ *
+ *    <e-UCM> is a research group of the Department of Software Engineering
+ *          and Artificial Intelligence at the Complutense University of Madrid
+ *          (School of Computer Science).
+ *
+ *          C Profesor Jose Garcia Santesmases sn,
+ *          28040 Madrid (Madrid), Spain.
+ *
+ *          For more info please visit:  <http://e-adventure.e-ucm.es> or
+ *          <http://www.e-ucm.es>
+ *
+ * ****************************************************************************
+ *
+ *  This file is part of eAdventure, version 2.0
+ *
+ *      eAdventure is free software: you can redistribute it and/or modify
+ *      it under the terms of the GNU Lesser General Public License as published by
+ *      the Free Software Foundation, either version 3 of the License, or
+ *      (at your option) any later version.
+ *
+ *      eAdventure is distributed in the hope that it will be useful,
+ *      but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *      MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *      GNU Lesser General Public License for more details.
+ *
+ *      You should have received a copy of the GNU Lesser General Public License
+ *      along with eAdventure.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+package es.eucm.ead.importer.subconverters.conditions;
+
+import com.google.inject.Inject;
+import com.google.inject.Singleton;
+import es.eucm.ead.importer.ModelQuerier;
+import es.eucm.ead.model.elements.conditions.*;
+import es.eucm.ead.model.elements.operations.ElementField;
+import es.eucm.eadventure.common.data.chapter.conditions.Conditions;
+import es.eucm.eadventure.common.data.chapter.conditions.FlagCondition;
+import es.eucm.eadventure.common.data.chapter.conditions.VarCondition;
+
+import java.util.ArrayList;
+import java.util.List;
+
+@Singleton
+public class ConditionsConverter {
+
+	private FlagConditionConverter flagConditionConverter;
+	private VarConditionConverter varConditionConverter;
+	private ModelQuerier modelQuerier;
+
+	/**
+	 * A list with the fields contained by the last condition converted
+	 */
+	private List<ElementField> fieldsInLastCond;
+
+	@Inject
+	public ConditionsConverter(FlagConditionConverter flagConditionConverter,
+			VarConditionConverter varConditionConverter,
+			ModelQuerier modelQuerier) {
+		this.flagConditionConverter = flagConditionConverter;
+		this.varConditionConverter = varConditionConverter;
+		this.modelQuerier = modelQuerier;
+		this.fieldsInLastCond = new ArrayList<ElementField>();
+		modelQuerier.setConditionConverter(this);
+	}
+
+	/**
+	 * Converts a condition
+	 * @param oldObject
+	 * @return
+	 */
+	public Condition convert(Conditions oldObject) {
+		fieldsInLastCond.clear();
+
+		// [COND - AndOr]
+		ANDCond newCondition = new ANDCond();
+
+		if (oldObject.getSimpleConditions().size() == 0
+				&& oldObject.getEitherConditionsBlockCount() == 0) {
+			return EmptyCond.TRUE;
+		}
+
+		for (es.eucm.eadventure.common.data.chapter.conditions.Condition c : oldObject
+				.getSimpleConditions()) {
+			Condition newC = getSimpleCondition(c);
+			if (newC != null) {
+				newCondition.addCondition(newC);
+			}
+
+		}
+
+		for (int i = 0; i < oldObject.getEitherConditionsBlockCount(); i++) {
+			ORCond orCondition = new ORCond();
+			Conditions conditions = oldObject.getEitherBlock(i);
+			for (es.eucm.eadventure.common.data.chapter.conditions.Condition c : conditions
+					.getSimpleConditions()) {
+				Condition cond = this.getSimpleCondition(c);
+				if (cond != null) {
+					orCondition.addCondition(cond);
+				}
+			}
+			if (orCondition.getConditions().size() > 0) {
+				newCondition.addCondition(orCondition);
+			}
+		}
+
+		return newCondition;
+	}
+
+	private Condition getSimpleCondition(
+			es.eucm.eadventure.common.data.chapter.conditions.Condition c) {
+		if (c.getType() == es.eucm.eadventure.common.data.chapter.conditions.Condition.FLAG_CONDITION) {
+			OperationCond cond = flagConditionConverter
+					.convert((FlagCondition) c);
+			fieldsInLastCond.add((ElementField) cond.getOp1());
+			return cond;
+		} else if (c.getType() == es.eucm.eadventure.common.data.chapter.conditions.Condition.VAR_CONDITION) {
+			OperationCond cond = varConditionConverter
+					.convert((VarCondition) c);
+			fieldsInLastCond.add((ElementField) cond.getOp1());
+			return cond;
+		} else if (c.getType() == es.eucm.eadventure.common.data.chapter.conditions.Condition.GLOBAL_STATE_CONDITION) {
+			// [COND - State]
+			Condition cond = modelQuerier.getGlobalState(c.getId());
+			cond.extractFields(fieldsInLastCond);
+			return cond;
+		}
+		return null;
+	}
+
+	public List<ElementField> getFieldsLastCondition() {
+		return fieldsInLastCond;
+	}
+
+}

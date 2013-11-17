@@ -3,37 +3,31 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-	<parent>
-		<groupId>ead</groupId>
-		<version>2.0.1-SNAPSHOT</version>
-		<artifactId>base</artifactId>
-		<relativePath>../../</relativePath>
-	</parent>
+    <parent>
+        <groupId>es.e-ucm.ead</groupId>
+        <artifactId>ead-base</artifactId>
+        <version>2.0.1-SNAPSHOT</version>
+        <relativePath>../../pom.xml</relativePath>
+    </parent>
 
-	<groupId>ead</groupId>
-	<version>2.0.1-SNAPSHOT</version>
-	<artifactId>importer</artifactId>
+	<artifactId>ead-importer</artifactId>
 	<packaging>jar</packaging>
 	<name>eAdventure 1.X importer</name>
 	<description>
     Importer for projects from 1.X- Only for Java
   </description>
 	<dependencies>
-		<dependency>
-			<groupId>ead</groupId>
-			<artifactId>model</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>ead</groupId>
-			<artifactId>tools-java</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>ead</groupId>
-			<artifactId>reader</artifactId>
-			<version>${project.version}</version>
-		</dependency>
+        <dependency>
+            <groupId>${project.parent.groupId}</groupId>
+            <artifactId>ead-writer</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>${project.parent.groupId}</groupId>
+            <artifactId>ead-legacy-plugins-model</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
+
 		<!-- external -->
 		<dependency>
 			<groupId>es.eucm.eadventure</groupId>
@@ -42,9 +36,8 @@
 		</dependency>
 
 		<dependency>
-			<groupId>com.google.inject</groupId>
-			<artifactId>guice</artifactId>
-			<classifier>no_aop</classifier>
+			<groupId>org.sonatype.sisu</groupId>
+			<artifactId>sisu-guice</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.slf4j</groupId>
@@ -53,7 +46,7 @@
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-simple</artifactId>
-			<optional>true</optional>
+			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>gui.ava</groupId>

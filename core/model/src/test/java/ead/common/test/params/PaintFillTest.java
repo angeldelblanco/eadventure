@@ -37,9 +37,9 @@
 
 package ead.common.test.params;
 
-import ead.common.params.fills.ColorFill;
-import ead.common.params.fills.LinearGradientFill;
-import ead.common.params.fills.Paint;
+import es.eucm.ead.model.params.fills.ColorFill;
+import es.eucm.ead.model.params.fills.LinearGradientFill;
+import es.eucm.ead.model.params.fills.Paint;
 
 public class PaintFillTest extends ParamsTest<Paint> {
 
@@ -56,7 +56,7 @@ public class PaintFillTest extends ParamsTest<Paint> {
 	@Override
 	public Paint[] getObjects() {
 		Paint[] fills = new Paint[20];
-		for ( int i = 0; i <fills.length; i+=2){
+		for (int i = 0; i < fills.length; i += 2) {
 			ColorFill c1 = new ColorFill(i * 3, i * 5, i * 7);
 			ColorFill c2 = new ColorFill(i * 4, i * 1, i * 8);
 			float x1 = i * 50;

@@ -1,0 +1,240 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>es.e-ucm.ead</groupId>
+        <artifactId>ead-base</artifactId>
+        <version>2.0.1-SNAPSHOT</version>
+        <relativePath>../../pom.xml</relativePath>
+    </parent>
+
+	<artifactId>ead-engine-html</artifactId>
+	<packaging>war</packaging>
+	<name>eAdventure HTML Engine</name>
+
+	<properties>
+		<gwt.version>2.5.0</gwt.version>
+		<gwt.runTarget>es.eucm.ead.engine.html/GwtLauncher.java</gwt.runTarget>
+		<!-- switch to INFO (or worse: DEBUG) to enable ridiculous amounts of debugging output-->
+
+	</properties>
+
+	<dependencies>
+        <dependency>
+            <groupId>${project.parent.groupId}</groupId>
+            <artifactId>ead-tools-gwt</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>${project.parent.groupId}</groupId>
+            <artifactId>ead-legacy-plugins-engine-core</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
+        <!-- Sources for GWT -->
+        <dependency>
+            <groupId>${project.parent.groupId}</groupId>
+            <artifactId>ead-model</artifactId>
+            <version>${project.parent.version}</version>
+            <classifier>sources</classifier>
+        </dependency>
+        <dependency>
+            <groupId>${project.parent.groupId}</groupId>
+            <artifactId>ead-engine-core</artifactId>
+            <version>${project.parent.version}</version>
+            <classifier>sources</classifier>
+        </dependency>
+        <dependency>
+            <groupId>${project.parent.groupId}</groupId>
+            <artifactId>ead-tools</artifactId>
+            <version>${project.parent.version}</version>
+            <classifier>sources</classifier>
+        </dependency>
+        <dependency>
+            <groupId>${project.parent.groupId}</groupId>
+            <artifactId>ead-tools-gwt</artifactId>
+            <version>${project.parent.version}</version>
+            <classifier>sources</classifier>
+        </dependency>
+        <dependency>
+            <groupId>${project.parent.groupId}</groupId>
+            <artifactId>ead-legacy-plugins-engine-core</artifactId>
+            <version>${project.parent.version}</version>
+            <classifier>sources</classifier>
+        </dependency>
+        <dependency>
+            <groupId>${project.parent.groupId}</groupId>
+            <artifactId>ead-legacy-plugins-model</artifactId>
+            <version>${project.parent.version}</version>
+            <classifier>sources</classifier>
+        </dependency>
+        <dependency>
+            <groupId>${project.parent.groupId}</groupId>
+            <artifactId>ead-reader</artifactId>
+            <version>${project.parent.version}</version>
+            <classifier>sources</classifier>
+        </dependency>
+        <!-- GLEANER -->
+        <dependency>
+            <groupId>es.e-ucm.gleaner</groupId>
+            <artifactId>gleaner-tracker-gwt</artifactId>
+            <classifier>sources</classifier>
+        </dependency>
+		<!-- external -->
+		<dependency>
+			<groupId>com.google.gwt</groupId>
+			<artifactId>gwt-user</artifactId>
+			<version>${gwt.version}</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.google.gwt</groupId>
+			<artifactId>gwt-servlet</artifactId>
+			<version>${gwt.version}</version>
+			<scope>runtime</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.google.gwt.inject</groupId>
+			<artifactId>gin</artifactId>
+			<version>2.0.0</version>
+		</dependency>
+		<dependency>
+			<groupId>com.gwtent</groupId>
+			<artifactId>GwtEnt</artifactId>
+			<version>2.0RC1</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-simple</artifactId>
+			<optional>true</optional>
+		</dependency>
+        <dependency>
+            <groupId>com.badlogicgames.gdx</groupId>
+            <artifactId>gdx-backend-gwt</artifactId>
+            <version>${gdx.version}</version>
+        </dependency>
+		<dependency>
+			<groupId>com.badlogicgames.gdx</groupId>
+			<artifactId>gdx</artifactId>
+			<version>${gdx.version}</version>
+			<classifier>sources</classifier>
+			<scope>provided</scope>
+		</dependency>
+        <dependency>
+            <groupId>aurelienribon</groupId>
+            <artifactId>tweenengine-api-sources</artifactId>
+            <version>1</version>
+        </dependency>
+
+		<dependency>
+			<groupId>com.badlogicgames.gdx</groupId>
+			<artifactId>gdx-backend-gwt</artifactId>
+			<version>${gdx.version}</version>
+			<classifier>sources</classifier>
+			<scope>provided</scope>
+		</dependency>
+	</dependencies>
+	<description>
+		GDX / GWT e-Adventure engine; requires GWT SDK to build, generates web app
+	</description>
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>gwt-maven-plugin</artifactId>
+				<version>${gwt.version}</version>
+				<configuration>
+					<configuration>
+						<buildOutputDirectory>${project.basedir}/war</buildOutputDirectory>
+						<webappDirectory>${project.basedir}/war</webappDirectory>
+						<module>${gwt.module}</module>
+					</configuration>
+				</configuration>
+				<executions>
+					<execution>
+						<goals>
+							<goal>compile</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<!-- war stuff -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-war-plugin</artifactId>
+				<version>2.3</version>
+                <configuration>
+                    <warName>eadengine</warName>
+                </configuration>
+			</plugin>
+			<!-- This configuration is used to store Eclipse m2e settings only. It
+			has no influence on the Maven build itself. -->
+			<plugin>
+				<groupId>org.eclipse.m2e</groupId>
+				<artifactId>lifecycle-mapping</artifactId>
+				<version>1.0.0</version>
+				<configuration>
+					<lifecycleMappingMetadata>
+						<pluginExecutions>
+							<pluginExecution>
+								<pluginExecutionFilter>
+									<groupId>org.datanucleus</groupId>
+									<artifactId>maven-datanucleus-plugin</artifactId>
+									<versionRange>[1.1.4,)</versionRange>
+									<goals>
+										<goal>enhance</goal>
+									</goals>
+								</pluginExecutionFilter>
+								<action>
+									<ignore></ignore>
+								</action>
+							</pluginExecution>
+							<pluginExecution>
+								<pluginExecutionFilter>
+									<groupId>net.kindleit</groupId>
+									<artifactId>maven-gae-plugin</artifactId>
+									<versionRange>[0.7.3,)</versionRange>
+									<goals>
+										<goal>unpack</goal>
+									</goals>
+								</pluginExecutionFilter>
+								<action>
+									<execute />
+								</action>
+							</pluginExecution>
+							<pluginExecution>
+								<pluginExecutionFilter>
+									<groupId>org.bsc.maven</groupId>
+									<artifactId>maven-processor-plugin</artifactId>
+									<versionRange>[2.0.5,)</versionRange>
+									<goals>
+										<goal>process</goal>
+									</goals>
+								</pluginExecutionFilter>
+								<action>
+									<execute />
+								</action>
+							</pluginExecution>
+						</pluginExecutions>
+					</lifecycleMappingMetadata>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+
+
+    <profiles>
+        <profile>
+            <!-- does not actually compile GWT; only validates it -->
+            <id>no-gwt</id>
+            <properties>
+                <gwt.validateOnly>true</gwt.validateOnly>
+            </properties>
+            <activation>
+                <activeByDefault>false</activeByDefault>
+            </activation>
+        </profile>
+    </profiles>
+
+</project>

@@ -2,26 +2,44 @@
    Maven Recipes
 -------------------------------------------------------------------------------
 
-* Build the eclipse projects (may need to build everything once first):
+* Build the eclipse projects
+
 	mvn eclipse:eclipse
 
 * Format file headers
 	mvn com.mycila.maven-license-plugin:maven-license-plugin:format
 
+* Format code (invoked automatically on compile)
+    mvn com.googlecode.maven-java-formatter-plugin:maven-java-formatter-plugin:format
+
+* Profiles
+	mvn <options> -P <profile1>[,<profile2>[,<profileN>]]
+
+	the following profiles are available:
+
+	release : generates self-contained, executable jars for editor and desktop-engine
+			-- and also wraps these jars in windows executables using launch4j
+	no-gwt  : avoids GWT compilation, and only validates GWT sources
+
+	editor  : only builds the editor
+	engine-desktop : only builds the desktop engine
+	engine-android : only builds the desktop engine
+
 * Make a clean build of everything
 	mvn clean install -Dandroid.sdk.path=<path-to-android-sdk>
+	takes 4:00 minutes on a quad-core
 
-	NOTE: "javac" must be accesible
-	NOTE: builds windows exes and self-executable jars of desktop-engine
-    and editor-core; also builds playn webapp and android-engine apk;
-    takes around 2 minutes on a quad-core; or 40s with -T 3;
-    most of the time (~30s and ~50s) is dedicated to building 
-    engine-android and engine-playn versions
+	mvn clean install -P no-gwt -Dandroid.sdk.path=<path-to-android-sdk>
+	takes 2:50 minutes on a quad-core
+
+	NOTES: "javac" must be accesible;
+		release versions of editor and desktop engine are not created
+		unless the release profile is enabled (see above)
 
 * Make a clean build of a single module
 	mvn clean install -pl ead:engine-desktop
 
-	NOTE: you can use -pl A,B,C to specify multiple modules; 
+	NOTE: you can use -pl A,B,C to specify multiple modules;
 	for a single module, you can "cd" to that module's directory and not use -pl
 
 * Find the dependencies for a given module
@@ -32,12 +50,12 @@
 		-DgroupId=org.jbox2d -DartifactId=jbox2d-library -Dversion=2.1.2 \
 		-Dpackaging=jar -DlocalRepositoryPath=etc/repository
 
-	NOTE: you will not be able to use it until you commit & push your changes 
-	online; *before* you do that, change 
-		<url>http://eadventure.googlecode.com/hg/etc/repository/</url>
-	in the main pom.xml to 
+	NOTE: you will not be able to use it until you commit & push your changes
+	online; *before* you do that, change
+		<url>https://github.com/e-ucm/eadventure/raw/master/etc/repository/</url>
+	in the main pom.xml to
 		<url>file://local-project-root/etc/repository</url>
-	to make sure everything works; it is very easy to get install-file wrong.
+	to make sure everything works; it is very easy to get the install-file wrong.
 
 * Force re-download of a single artifact
 	delete the artifact from your .m2 local repository; it will be re-downloaded

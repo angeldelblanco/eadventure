@@ -36,8 +36,8 @@
  */
 
 /*
- * Adapted from JDK14LoggerAdapter v. 1.6.4; licensed as follows: 
- * 
+ * Adapted from JDK14LoggerAdapter v. 1.6.4; licensed as follows:
+ *
  * Copyright (c) 2004-2005 SLF4J.ORG
  * Copyright (c) 2004-2005 QOS.ch
  *
@@ -77,14 +77,18 @@ import java.util.Map;
 
 public class LoggerFactory {
 	private static final Map<String, Logger> map = new HashMap<String, Logger>();
-	
-	public static synchronized Logger getLogger(String name) {
+
+	public static Logger getLogger(String name) {
 		synchronized (map) {
-			if ( ! map.containsKey(name)) {
-				map.put(name, 
-						new Logger(java.util.logging.Logger.getLogger(name)));
+			if (!map.containsKey(name)) {
+				map.put(name, new Logger(java.util.logging.Logger
+						.getLogger(name)));
 			}
 		}
 		return map.get(name);
+	}
+
+	public static Logger getLogger(Class<?> c) {
+		return getLogger(c.getName());
 	}
 }

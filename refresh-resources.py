@@ -36,14 +36,14 @@ def main():
             "\n\t" + project +
             "\n\t" + package + "===>")
         subprocess.call(["java", 
-            "-cp", "core/utils/target/classes",
-            "ead.utils.i18n.ResourceCreator",
+            "-cp", "core/editor-core/target/classes",
+            "es.eucm.ead.editor.util.i18n.ResourceCreator",
             project, package, 
             "etc/LICENSE.txt"
 #  			,])   
             ,source])   
 
-    find_and_do(".", False, regen)    
+    find_and_do("core/editor-core", False, regen)    
     
 main()
 

@@ -72,11 +72,10 @@
 
 package org.slf4j;
 
+import org.slf4j.MessageFormatter.FormattingTuple;
+
 import java.util.logging.Level;
 import java.util.logging.LogRecord;
-
-import org.slf4j.MessageFormatter;
-import org.slf4j.MessageFormatter.FormattingTuple;
 
 /**
  * A wrapper over {@link java.util.logging.Logger java.util.logging.Logger} in
@@ -99,7 +98,7 @@ public final class Logger {
 		this.logger = logger;
 		this.name = logger.getName();
 	}
-	
+
 	/**
 	 * Returns own name
 	 */
@@ -287,7 +286,7 @@ public final class Logger {
 	 * @param argArray
 	 *            an array of arguments
 	 */
-	public void debug(String format, Object[] argArray) {
+	public void debug(String format, Object... argArray) {
 		if (logger.isLoggable(Level.FINE)) {
 			FormattingTuple ft = MessageFormatter.arrayFormat(format, argArray);
 			log(SELF, Level.FINE, ft.getMessage(), ft.getThrowable());
@@ -634,11 +633,11 @@ public final class Logger {
 	}
 
 	static String SELF = Logger.class.getName();
-	
+
 	// not using markers
 	// was: static String SUPER = MarkerIgnoringBase.class.getName();
-	static String SUPER = SELF;	
-	
+	static String SUPER = SELF;
+
 	/**
 	 * Fill in caller data if possible.
 	 * 

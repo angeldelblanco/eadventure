@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>es.e-ucm.ead</groupId>
+        <artifactId>ead-base</artifactId>
+        <version>2.0.1-SNAPSHOT</version>
+        <relativePath>../../pom.xml</relativePath>
+    </parent>
+
+	<artifactId>demos-techdemo</artifactId>
+	<packaging>jar</packaging>
+	<name>Tech Demo</name>
+	<description>Tech demo</description>
+	<dependencies>
+		<!-- Desktop dependencies. Not used in GWT compilation -->
+        <dependency>
+            <groupId>${project.parent.groupId}</groupId>
+            <artifactId>ead-engine-desktop</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>${project.parent.groupId}</groupId>
+            <artifactId>ead-writer</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-simple</artifactId>
+			<optional>true</optional>
+		</dependency>
+	</dependencies>
+</project>
